@@ -10,8 +10,9 @@ var DateModel = Backbone.Model.extend({
 		return "year: " + this.date.getMonth() + "month: " + this.date.getFullYear();
 	},
 	GetDays: function(){
-		//Лешино домашнее заданее функция генерирующая 
+		//функция генерирующая 
 		//список дней по именам недели
+		//или придумать что-то другое
 		return [{day:"Вторник", num:1}];
 	}
 });
