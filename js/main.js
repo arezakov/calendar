@@ -27,45 +27,30 @@
 			//функция генерирующая 
 			//список дней по именам недели
 			//или придумать что-то другое
-			return [
-				{day:"Понедельник", num:''},
-				{day:"Вторник", num:1},
-				{day: "Среда", num:2},
-				{day: "Четверг", num:3},
-				{day: "Пятница", num:4},
-				{day: "Суббота", num:5},
-				{day: "Воскресенье", num:6},
-				{day: "Понедельник", num:7},
-				{day: "Вторник", num:8},
-				{day: "Среда", num:9},
-				{day: "Четверг", num:10},
-				{day: "Пятница", num:11},
-				{day: "Суббота", num:12},
-				{day: "Воскресенье", num:13},
-				{day: "Понедельник", num:14},
-				{day: "Вторник", num:15},
-				{day: "Среда", num:16},
-				{day: "Четверг", num:17},
-				{day: "Пятница", num:18},
-				{day: "Суббота", num:19},
-				{day: "Воскресенье", num:20},
-				{day: "Понедельник", num:21},
-				{day: "Вторник", num:22},
-				{day: "Среда", num:23},
-				{day: "Четверг", num:24},
-				{day: "Пятница", num:25},
-				{day: "Суббота", num:26},
-				{day: "Воскресенье", num:27},
-				{day: "Понедельник", num:28},
-				{day: "Вторник", num:29},
-				{day: "Среда", num:30},
-				{day: "Четверг", num:''},
-				{day: "Пятница", num:''},
-				{day: "Суббота", num:''},
-				{day: "Воскресенье", num:''},
+			//console.log("Month: " + this.date.getMonth() + " Year: " + this.date.getFullYear());
+			var year = this.date.getFullYear(),
+				month = this.date.getMonth();
 
+			var result = [],
+				dayNum = 1,
+				lastDay = new Date(year, month+1, 0).getDate(), //Сколько дней
+                dnFirst = new Date(year, month, 1).getDay(), //день недели первого дня месяца
+                dnLast = new Date(year, month, lastDay).getDay(); //день недели последнего дня месяца
 
-			];
+            for (var i = 1; i <= 42; i++) {
+            	if ((i < dnFirst) || (dayNum > lastDay)) {
+            		result.push({day:'', num:'-'});
+            		continue;
+            	}
+            	result.push({day:'', num: dayNum++});
+
+            };
+
+			console.log(lastDay);
+			console.log(dnFirst);
+			console.log(dnLast);
+
+			return result;
 		}
 	});
 
@@ -85,9 +70,11 @@
 
 			calendarHTML += '<tr>';
 			this.el.innerHTML = calendarHTML;  
-			//var div = $('<div>').text(val);
-			//console.log(val);
-			//$('#events-calendar').append(div);
+
+			/*var val = this.model.GetDateString();
+			var div = $('<div>').text(val);
+			console.log(val);
+			$('#events-calendar').append(div);*/
 		},
 		initialize: function(){
 			//Календаь на шаблоне 
@@ -101,6 +88,6 @@
 		}
 	});
 
-	var cView = new CalendarView({el: $("#events-calendar"), model: new DateModel(new Date(2002, 2, 4))});
+	var cView = new CalendarView({el: $("#events-calendar"), model: new DateModel()});
 
 })();
