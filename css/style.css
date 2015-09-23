@@ -1,40 +1,56 @@
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea, p, blockquote, th, td, article, aside, canvas, details, figcaption, figure, footer, header, menu, nav, section, summary, time, mark, audio, video {margin: 0; padding: 0;}
+table {border-collapse: collapse; border-spacing: 0;}
+fieldset, img, span {border: 0;}
+address, caption, cite, code, dfn, th, var {font-style: normal; font-weight: normal;}
+ol, ul {list-style: none;}
+caption, th {text-align: left;}
+abbr, acronym {border: 0;}
+sup, sub {vertical-align: baseline; position: relative; top: -.4em;}
+sub {top: .4em;}
+article, aside, details, figcaption, figure, footer, header, menu, nav, section, main, time {display: block;}
+
+* {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+      box-sizing: border-box;
+}
+
 .wrap {
 	margin: 0 auto;
 	padding: 0 10px;
 	width: 990px;
 }
-.calendar-box {
-	td{
+
+#events-calendar td{
 		padding: 20px;
-	}
 }
 
-#calendar2 {
+#events-calendar {
   line-height: 1.2em;
   font-size: 15px;
   text-align: center;
 }
-#calendar2 thead tr:last-child {
+#events-calendar thead tr:last-child {
   font-size: small;
   color: rgb(85, 85, 85);
 }
-#calendar2 thead tr:nth-child(1) td:nth-child(2) {
+#events-calendar thead tr:nth-child(1) td:nth-child(2) {
   color: rgb(50, 50, 50);
 }
-#calendar2 thead tr:nth-child(1) td:nth-child(1):hover, #calendar2 thead tr:nth-child(1) td:nth-child(3):hover {
+#events-calendar thead tr:nth-child(1) td:nth-child(1):hover, #events-calendar thead tr:nth-child(1) td:nth-child(3):hover {
   cursor: pointer;
 }
-#calendar2 tbody td {
+#events-calendar tbody td {
   color: rgb(44, 86, 122);
 }
-#calendar2 tbody td:nth-child(n+6), #calendar2 .holiday {
+#events-calendar tbody td:nth-child(n+6), #events-calendar .holiday {
   color: rgb(231, 140, 92);
 }
-#calendar2 tbody td.today {
+#events-calendar tbody td.today {
   background: rgb(220, 0, 0);
   color: #fff;
 }
-#calendar2 tbody td.event {
+#events-calendar tbody td.event {
   background: rgb(0, 220, 0);
   color: #fff;
 }
