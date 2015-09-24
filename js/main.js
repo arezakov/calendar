@@ -38,7 +38,12 @@
 		GetDays: function(){
 			var year = this.get('date').getFullYear(),
 				month = this.get('date').getMonth(),
-				date = this.get('date').getDate();
+				date = this.get('date').getDate(),
+				todayFlag = false,
+				todayDate = new Date(),
+				todayYear = todayDate.getFullYear(),
+				todayMonth = todayDate.getMonth(),
+				todayDay = todayDate.getDate();
 
 			var result = [],
 				dayNum = 1,
@@ -47,11 +52,15 @@
                 dnLast = new Date(year, month, lastDay).getDay(); //день недели последнего дня месяца
 
             for (var i = 1; i <= 42; i++) {
+            	todayFlag = false;
             	if ((i < dnFirst) || (dayNum > lastDay)) {
             		result.push({day:'', num:'-'});
             		continue;
             	}
-            	result.push({day:'', num: dayNum++});
+            	if(year == todayYear && month == todayMonth && dayNum == todayDay) {
+            		todayFlag = true;
+            	}
+            	result.push({day:'', num: dayNum++, today: todayFlag});
 
             };
 
@@ -93,7 +102,7 @@
 				if ((num % 7) == 0 && num != 0) {
 					calendarHTML += '</tr><tr>';
 				}
-				calendarHTML += '<td>'  + day.num + '</td>';
+				calendarHTML += '<td class="' + (day.today == true ? 'today' : '') + '">'  + day.num + '</td>';
 
 			});
 
