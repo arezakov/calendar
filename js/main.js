@@ -176,27 +176,30 @@
 			this.render();
 		},
 		select: function(selectDate) {
-	        var eventView = new EventView();
-            eventView.collection = this.collection;
-            eventView.model = new Event();
-            eventView.selectDate = selectDate.target.textContent;
-            eventView.render();
+	        this.eventView = new EventView();
+            this.eventView.collection = this.collection;
+            this.eventView.model = new Event();
+            this.eventView.selectDate = selectDate.target.textContent;
+            this.eventView.render();
 	    },
-	    changeEvent: function(selectDate){
-	    	console.log(selectDate);
+	    changeEvent: function(fcEvent){
+	    	//console.log(this.eventView);
+	 		this.eventView.model = this.collection.get(fcEvent.target.dataset.evcid);
+        	this.eventView.render();
 	    }
 	});
 	
 	var EventView = Backbone.View.extend({
 		 el: $('#event-dialog'),
 	    initialize: function() {
-	        _.bindAll(this, 'save', 'close');
+	        _.bindAll(this, 'save', 'close', 'open');
 	    },
 	    render: function() {
 	    	    this.$el.dialog({
 	            modal: true,
-	            title: 'Новое событие',
-	            buttons: {'Сохранить': this.save, 'Отмена': this.close}
+	            title: (this.model.isNew() ? 'Добавить' : 'Редактировать') + ' событие',
+	            buttons: {'Сохранить': this.save, 'Отмена': this.close},
+	            open: this.open,
 	        });
 	 
 	        return this;
@@ -205,15 +208,24 @@
 	    	this.$el.find('.field').val('');
 	        this.$el.dialog('close');
 	    },
+	    open: function() {
+	        this.$('#event-dialog-title').val(this.model.get('title'));
+	        this.$('#event-dialog-desc').val(this.model.get('desc'));
+	    },
 	    save: function() {
-	    	var newEventYear = fullCalendarView.$el.children('table').attr("data-year");
-	    	var newEventMonth = fullCalendarView.$el.children('table').attr("data-month");
-	    	var newEventDay = this.selectDate;
+	    	
 	    	
 	    	//console.log(this.collection.where({'title': '111'}));
-
-            this.model.set({'date': new Date(newEventYear, newEventMonth, newEventDay), 'title': this.$('#event-dialog-title').val(), 'desc': this.$('#event-dialog-desc').val()});
-            this.collection.add(this.model);
+	    	if (this.model.isNew()) {
+	    		var newEventYear = fullCalendarView.$el.children('table').attr("data-year");
+		    	var newEventMonth = fullCalendarView.$el.children('table').attr("data-month");
+		    	var newEventDay = this.selectDate;
+	    		this.model.set({'date': new Date(newEventYear, newEventMonth, newEventDay), 'title': this.$('#event-dialog-title').val(), 'desc': this.$('#event-dialog-desc').val()});
+           		 this.collection.add(this.model);
+	        } else {
+	            this.model.set({'title': this.$('#event-dialog-title').val(), 'desc': this.$('#event-dialog-desc').val()});
+	        }
+            
             this.close();
         },
 
