@@ -19,7 +19,6 @@ article, aside, details, figcaption, figure, footer, header, menu, nav, section,
   display: none;
 }
 .dialog input{
-  width: 300px;
   display: block;
   padding: 8px;
 }

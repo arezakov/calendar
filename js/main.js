@@ -12,11 +12,10 @@
 	    model: Event
 	});
 
-	var events = new Events();
 
-	var EventView = Backbone.View.extend({
+	var EventItemView = Backbone.View.extend({
 	    tagName: "article",
-	    className: "contact-container",
+	    className: "ivent-list-container",
 	    template: $("#eventTemplate").html(),
 
 	    render: function () {
@@ -46,22 +45,18 @@
 	    },
 
 	    renderEvent: function (item) {
-	        var eventView = new EventView({
+	        var eventItemView = new EventItemView({
 	            model: item
 	        });
-	        this.$el.append(eventView.render().el);
+	        this.$el.append(eventItemView.render().el);
 	    },
 	    events: {
 	    	"click input": "addEvent",
 	    },
 	    addEvent: function() {
 	    	this.collection.add({date: new Date(), title:'новое событие', desc: 'Описание нового события'});
-	    	console.log(this.collection);
 	    }
 	});
-
-	var eventsListView = new EventsListView();
-	eventsListView.listenTo(events, 'add', eventsListView.render);
 
 	var DateModel = Backbone.Model.extend({
 		defaults:{
@@ -76,6 +71,7 @@
 
 			
 		},
+
 		GetDateString: function(){
 			return "year: " + this.get('date').getMonth() + "month: " + this.get('date').getFullYear();
 		},
@@ -177,23 +173,49 @@
 			this.render();
 		},
 		select: function(selectDate) {
-	        new EventDialogView().render();
+	        var eventView = new EventView();
+            eventView.collection = this.collection;
+            eventView.model = new Event();
+            eventView.render();
 	    },
 	});
 	
-	var EventDialogView = Backbone.View.extend({
-	    el: $('#event-dialog'),
+	var EventView = Backbone.View.extend({
+		 el: $('#event-dialog'),
+	    initialize: function() {
+	        _.bindAll(this, 'save', 'close');
+	    },
 	    render: function() {
-	    	$.fancybox( this.$el, {});
+	    	console.log(this.model);   
+	        this.$el.dialog({
+	            modal: true,
+	            title: 'New Event',
+	            buttons: {'Ok': this.save, 'Cancel': this.close}
+	        });
+	 
 	        return this;
 	    },
-	    
+	    close: function() {
+	        this.$el.dialog('close');
+	    },
+	    save: function() {
+            this.model.set({'date': new Date(), 'title': this.$('#event-dialog-title').val(), 'desc': this.$('#event-dialog-desc').val()});
+            this.collection.add(this.model);
+            this.close();
+        },
+
 	});
 
+	var events = new Events();
+
 	var dateModel = new DateModel();
-	var fullCalendarView = new FullCalendarView({el: $("#events-calendar"), model: dateModel});
+
+	var fullCalendarView = new FullCalendarView({el: $("#events-calendar"), model: dateModel,  collection: events});
 	fullCalendarView.listenTo(dateModel, 'change', fullCalendarView.render);
 
+
+	var eventsListView = new EventsListView();
+	eventsListView.listenTo(events, 'add', eventsListView.render);
 
 
 })();
