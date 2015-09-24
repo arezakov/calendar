@@ -4,7 +4,7 @@
 
     var Event = Backbone.Model.extend({
 	    defaults: {
-	        photo: "/img/placeholder.png"
+	        date: null
 	    }
 	});
 
@@ -60,10 +60,7 @@
 			} else {
 				this.set({date: new Date() });
 			}
-
-			
 		},
-
 		GetDateString: function(){
 			return "year: " + this.get('date').getMonth() + "month: " + this.get('date').getFullYear();
 		},
@@ -85,7 +82,8 @@
 				todayDate = new Date(),
 				todayYear = todayDate.getFullYear(),
 				todayMonth = todayDate.getMonth(),
-				todayDay = todayDate.getDate();
+				todayDay = todayDate.getDate(),
+				evcid = '';
 
 			var result = [],
 				dayNum = 1,
@@ -95,16 +93,27 @@
 
             for (var i = 1; i <= 42; i++) {
             	todayFlag = false;
+            	evcid = '';
             	if ((i < dnFirst) || (dayNum > lastDay)) {
             		result.push({day:'', num:'-'});
             		continue;
             	}
-            	if(year == todayYear && month == todayMonth && dayNum == todayDay) {
+            	if (year == todayYear && month == todayMonth && dayNum == todayDay) {
             		todayFlag = true;
             	}
-            	result.push({day:'', num: dayNum++, today: todayFlag});
-            };
 
+            	events.each(function(item, nom){
+	            	if (year == item.get("date").getFullYear() && month == item.get("date").getMonth() && dayNum == item.get("date").getDate()) {
+	            			evcid = item.cid;
+	            			return true;
+	            	}
+	            });
+
+            	result.push({day:'', num: dayNum++, today: todayFlag, evcid: evcid});
+            };
+           
+           	
+         	//console.log(result);
 			return result;
 		}
 	});
@@ -134,17 +143,15 @@
 					</thead>\
 					<tbody>';
 					
-
 			_.each(dayArr, function(day, num) {
 
-				if (num == 0) {
+				if (num == 0) 
 					calendarHTML += '<tr>';
-				}
-				if ((num % 7) == 0 && num != 0) {
-					calendarHTML += '</tr><tr>';
-				}
-				calendarHTML += '<td class="' + (day.num != '-' ? 'date ' : '') + (day.today == true ? 'today ' : '') + '">'  + day.num + '</td>';
+				
+				if ((num % 7) == 0 && num != 0) 
+						calendarHTML += '</tr><tr>';
 
+				calendarHTML += '<td '+ (day.evcid ? 'data-evcid="'+day.evcid+'"' : '') +' class="' + (day.num != '-' && !day.evcid ? 'date ' : '') + (day.today == true ? 'today ' : '') + ' ">'  + day.num + '</td>';
 			});
 
 			calendarHTML += '</tr></tbody></table>';
@@ -156,7 +163,8 @@
 		events: {
 			"click .monthPrev": "monthPrev",
 			"click .monthNext": "monthNext",
-			"click .date": "select"
+			"click .date": "select",
+			"click [data-evcid]": "changeEvent"
 		},
 		monthPrev: function() {
 			this.model.set({date: new Date(this.model.get('date').getFullYear(), this.model.get('date').getMonth() - 1, 1)});
@@ -174,6 +182,9 @@
             eventView.selectDate = selectDate.target.textContent;
             eventView.render();
 	    },
+	    changeEvent: function(selectDate){
+	    	console.log(selectDate);
+	    }
 	});
 	
 	var EventView = Backbone.View.extend({
@@ -198,6 +209,9 @@
 	    	var newEventYear = fullCalendarView.$el.children('table').attr("data-year");
 	    	var newEventMonth = fullCalendarView.$el.children('table').attr("data-month");
 	    	var newEventDay = this.selectDate;
+	    	
+	    	//console.log(this.collection.where({'title': '111'}));
+
             this.model.set({'date': new Date(newEventYear, newEventMonth, newEventDay), 'title': this.$('#event-dialog-title').val(), 'desc': this.$('#event-dialog-desc').val()});
             this.collection.add(this.model);
             this.close();
@@ -211,10 +225,14 @@
 
 	var fullCalendarView = new FullCalendarView({el: $("#events-calendar"), model: dateModel,  collection: events});
 	fullCalendarView.listenTo(dateModel, 'change', fullCalendarView.render);
+	fullCalendarView.listenTo(events, 'all', fullCalendarView.render);
 
 
 	var eventsListView = new EventsListView();
-	eventsListView.listenTo(events, 'add', eventsListView.render);
+	eventsListView.listenTo(events, 'all', eventsListView.render);
+
+
+
 
 
 })();

@@ -21,6 +21,7 @@ article, aside, details, figcaption, figure, footer, header, menu, nav, section,
 .dialog input{
   display: block;
   padding: 8px;
+  width: 100%;
 }
 .wrap {
 	margin: 0 auto;
@@ -73,5 +74,9 @@ article, aside, details, figcaption, figure, footer, header, menu, nav, section,
 }
 #events-calendar tbody td.event {
   background: rgb(0, 220, 0);
+  color: #fff;
+}
+#events-calendar tbody td[data-evcid] {
+  background: #00DCA6;
   color: #fff;
 }
