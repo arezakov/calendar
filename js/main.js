@@ -17,19 +17,28 @@
 			date: null
 		},
 		initialize: function(cur_date){
-			this.date = cur_date || new Date();
+			if (cur_date) {
+				this.set({date: cur_date});
+			} else {
+				this.set({date: new Date() });
+			}
+
 			
 		},
 		GetDateString: function(){
-			return "year: " + this.date.getMonth() + "month: " + this.date.getFullYear();
+			return "year: " + this.get('date').getMonth() + "month: " + this.get('date').getFullYear();
+		},
+		GetMonth: function(){
+			var month = ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
+			return month[this.get('date').getMonth()];
+		},
+		GetYear: function(){
+			return this.get('date').getFullYear();
 		},
 		GetDays: function(){
-			//функция генерирующая 
-			//список дней по именам недели
-			//или придумать что-то другое
-			//console.log("Month: " + this.date.getMonth() + " Year: " + this.date.getFullYear());
-			var year = this.date.getFullYear(),
-				month = this.date.getMonth();
+			var year = this.get('date').getFullYear(),
+				month = this.get('date').getMonth(),
+				date = this.get('date').getDate();
 
 			var result = [],
 				dayNum = 1,
@@ -46,10 +55,6 @@
 
             };
 
-			console.log(lastDay);
-			console.log(dnFirst);
-			console.log(dnLast);
-
 			return result;
 		}
 	});
@@ -58,36 +63,63 @@
 		render: function(){
 			var val = this.model.GetDateString(),
 				dayArr = this.model.GetDays(),
-				calendarHTML = '<table>';
+				month = this.model.GetMonth(),
+				year = this.model.GetYear(),
+				calendarHTML = '<table>\
+					<thead>\
+						<tr>\
+							<td class="monthPrev">‹</td>\
+							<td colspan="5">' + month + ' ' + year + '</td>\
+							<td class="monthNext">›</td>\
+						</tr>\
+						<tr>\
+							<td>Пн</td>\
+							<td>Вт</td>\
+							<td>Ср</td>\
+							<td>Чт</td>\
+							<td>Пт</td>\
+							<td>Сб</td>\
+							<td>Вс</td>\
+						</tr>\
+					</thead>\
+					<tbody>';
+					
 
 			_.each(dayArr, function(day, num) {
-				if ((num % 7) == 0 || num == 0) {
+
+				if (num == 0) {
+					calendarHTML += '<tr>';
+				}
+				if ((num % 7) == 0 && num != 0) {
 					calendarHTML += '</tr><tr>';
 				}
 				calendarHTML += '<td>'  + day.num + '</td>';
 
 			});
 
-			calendarHTML += '<tr>';
+			calendarHTML += '</tr></tbody></table>';
+
 			this.el.innerHTML = calendarHTML;  
 
-			/*var val = this.model.GetDateString();
-			var div = $('<div>').text(val);
-			console.log(val);
-			$('#events-calendar').append(div);*/
+			return this;
+		},
+		events: {
+			"click .monthPrev": "monthPrev",
+			"click .monthNext": "monthNext",
+
+		},
+		monthPrev: function() {
+			this.model.set({date: new Date(this.model.get('date').getFullYear(), this.model.get('date').getMonth() - 1, 1)});
+		},
+		monthNext: function() {
+			this.model.set({date: new Date(this.model.get('date').getFullYear(), this.model.get('date').getMonth() + 1, 1)});
 		},
 		initialize: function(){
-			//Календаь на шаблоне 
-			//с циклом по дням.
-			/*
-			<% _.each(days, function(day, num) { %> 
-	    <a class="btn"><%= acs.label %></a>
-	<% });
-			*/
 			this.render();
 		}
 	});
-
-	var cView = new CalendarView({el: $("#events-calendar"), model: new DateModel()});
+	var dateModel = new DateModel();
+	var cView = new CalendarView({el: $("#events-calendar"), model: dateModel});
+	cView.listenTo(dateModel, 'change', cView.render);
 
 })();
