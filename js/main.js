@@ -105,7 +105,7 @@
             	events.each(function(item, nom){
 	            	if (year == item.get("date").getFullYear() && month == item.get("date").getMonth() && dayNum == item.get("date").getDate()) {
 	            			evcid = item.cid;
-	            			return true;
+	            			//return true;
 	            	}
 	            });
 
@@ -192,15 +192,22 @@
 	var EventView = Backbone.View.extend({
 		 el: $('#event-dialog'),
 	    initialize: function() {
-	        _.bindAll(this, 'save', 'close', 'open');
+	        _.bindAll(this, 'save', 'close', 'open', 'remove');
 	    },
 	    render: function() {
+	    	var buttons = {'Сохранить': this.save};
+
+	        if (!this.model.isNew()) {
+	            _.extend(buttons, {'Удалить': this.remove});
+	        }
+       		_.extend(buttons, {'Отмена': this.close});
+
 	    	    this.$el.dialog({
-	            modal: true,
-	            title: (this.model.isNew() ? 'Добавить' : 'Редактировать') + ' событие',
-	            buttons: {'Сохранить': this.save, 'Отмена': this.close},
-	            open: this.open,
-	        });
+		            modal: true,
+		            title: (this.model.isNew() ? 'Добавить' : 'Редактировать') + ' событие',
+		            buttons: buttons,
+		            open: this.open,
+		        });
 	 
 	        return this;
 	    },
@@ -213,8 +220,6 @@
 	        this.$('#event-dialog-desc').val(this.model.get('desc'));
 	    },
 	    save: function() {
-	    	
-	    	
 	    	//console.log(this.collection.where({'title': '111'}));
 	    	if (this.model.isNew()) {
 	    		var newEventYear = fullCalendarView.$el.children('table').attr("data-year");
