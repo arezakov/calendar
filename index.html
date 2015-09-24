@@ -12,6 +12,7 @@
 		
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="fancybox/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
 		
 		<link rel="stylesheet" href="css/style.css" />
 	</head>
@@ -28,24 +29,34 @@
 				<div id="events-list"></div>
 			</div>
 		</div>
+		
+		<div id='event-dialog' class='dialog ui-helper-hidden'>
+            <form>
+                <div>
+                    <label>Дата:</label>
+                    <input id='event-dialog-date' class="field" type="text"></input>
+                </div>
+                 <div>
+                    <label>Title:</label>
+                    <input id='event-dialog-title' class="field" type="text"></input>
+                </div>
+                <div>
+                    <label>Description:</label>
+                    <input id='event-dialog-desc' class="field" type="text"></input>
+                </div>
+            </form>
+        </div>
 
 		<script id="eventTemplate" type="text/template">
 		    <h3><%= title %></h3>
 		    <p><%= desc %></p>
 		    <p><%= date %></p>
 		</script>
-		<script id="contactTemplate" type="text/template">
-		    <img src="<%= photo %>" alt="<%= name %>" />
-		    <h1><%= name %><span><%= type %></span></h1>
-		    <div><%= address %></div>
-		    <dl>
-		        <dt>Tel:</dt><dd><%= tel %></dd>
-		        <dt>Email:</dt><dd><a href="mailto:<%= email %>"><%= email %></a></dd>
-		    </dl>
-		</script>
 
-
+		
 		<script type="text/javascript" src="http://yastatic.net/jquery/2.1.4/jquery.js"></script>
+		<script type="text/javascript" src="http://yastatic.net/jquery/fancybox/2.1.4/jquery.fancybox.js"></script>
+		<script type="text/javascript" src="fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
 		
 		<script type="text/javascript" src="http://yastatic.net/underscore/1.6.0/underscore.js"></script>
 		<script type="text/javascript" src="http://yastatic.net/backbone/1.1.2/backbone.js"></script>

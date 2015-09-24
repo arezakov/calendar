@@ -118,7 +118,7 @@
 		}
 	});
 
-	var CalendarView = Backbone.View.extend({
+	var FullCalendarView = Backbone.View.extend({
 		render: function(){
 			var val = this.model.GetDateString(),
 				dayArr = this.model.GetDays(),
@@ -152,7 +152,7 @@
 				if ((num % 7) == 0 && num != 0) {
 					calendarHTML += '</tr><tr>';
 				}
-				calendarHTML += '<td class="' + (day.today == true ? 'today' : '') + '">'  + day.num + '</td>';
+				calendarHTML += '<td class="' + (day.num != '-' ? 'date ' : '') + (day.today == true ? 'today ' : '') + '">'  + day.num + '</td>';
 
 			});
 
@@ -165,7 +165,7 @@
 		events: {
 			"click .monthPrev": "monthPrev",
 			"click .monthNext": "monthNext",
-
+			"click .date": "select"
 		},
 		monthPrev: function() {
 			this.model.set({date: new Date(this.model.get('date').getFullYear(), this.model.get('date').getMonth() - 1, 1)});
@@ -175,13 +175,25 @@
 		},
 		initialize: function(){
 			this.render();
-		}
+		},
+		select: function(selectDate) {
+	        new EventDialogView().render();
+	    },
+	});
+	
+	var EventDialogView = Backbone.View.extend({
+	    el: $('#event-dialog'),
+	    render: function() {
+	    	$.fancybox( this.$el, {});
+	        return this;
+	    },
+	    
 	});
 
 	var dateModel = new DateModel();
-	var cView = new CalendarView({el: $("#events-calendar"), model: dateModel});
-	cView.listenTo(dateModel, 'change', cView.render);
+	var fullCalendarView = new FullCalendarView({el: $("#events-calendar"), model: dateModel});
+	fullCalendarView.listenTo(dateModel, 'change', fullCalendarView.render);
 
-	
+
 
 })();
