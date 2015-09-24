@@ -2,13 +2,6 @@
 	
 	"use strict"
 
-	var contacts = [
-        { date: null,  title: "family", desc: "121212" },
-        { date: null,  title: "family", desc: "121212" },
-        { date: null,  title: "friend", desc: "121212" }
-    ];
- 
-
     var Event = Backbone.Model.extend({
 	    defaults: {
 	        photo: "/img/placeholder.png"
@@ -62,7 +55,7 @@
 	    	"click input": "addEvent",
 	    },
 	    addEvent: function() {
-	    	this.collection.add({date: null, title:'новое событие', desc: 'Описание нового события'});
+	    	this.collection.add({date: new Date(), title:'новое событие', desc: 'Описание нового события'});
 	    	console.log(this.collection);
 	    }
 	});
