@@ -40,8 +40,6 @@
 	        _.each(this.collection.models, function (item) {
 	            that.renderEvent(item);
 	        }, this);
-
-	        this.$el.prepend('<input type="button" value="Создать событие">');
 	    },
 
 	    renderEvent: function (item) {
@@ -49,12 +47,6 @@
 	            model: item
 	        });
 	        this.$el.append(eventItemView.render().el);
-	    },
-	    events: {
-	    	"click input": "addEvent",
-	    },
-	    addEvent: function() {
-	    	this.collection.add({date: new Date(), title:'новое событие', desc: 'Описание нового события'});
 	    }
 	});
 
@@ -77,7 +69,10 @@
 		},
 		GetMonth: function(){
 			var month = ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
-			return month[this.get('date').getMonth()];
+			return {
+				rusNameMonth: month[this.get('date').getMonth()],
+				numberMonth: this.get('date').getMonth()
+			};
 		},
 		GetYear: function(){
 			return this.get('date').getFullYear();
@@ -118,9 +113,9 @@
 		render: function(){
 			var val = this.model.GetDateString(),
 				dayArr = this.model.GetDays(),
-				month = this.model.GetMonth(),
+				month = this.model.GetMonth().rusNameMonth,
 				year = this.model.GetYear(),
-				calendarHTML = '<table>\
+				calendarHTML = '<table data-year="'+ year +'" data-month="' + this.model.GetMonth().numberMonth + '">\
 					<thead>\
 						<tr>\
 							<td class="monthPrev">‹</td>\
@@ -176,6 +171,7 @@
 	        var eventView = new EventView();
             eventView.collection = this.collection;
             eventView.model = new Event();
+            eventView.selectDate = selectDate.target.textContent;
             eventView.render();
 	    },
 	});
@@ -186,20 +182,23 @@
 	        _.bindAll(this, 'save', 'close');
 	    },
 	    render: function() {
-	    	console.log(this.model);   
-	        this.$el.dialog({
+	    	    this.$el.dialog({
 	            modal: true,
-	            title: 'New Event',
-	            buttons: {'Ok': this.save, 'Cancel': this.close}
+	            title: 'Новое событие',
+	            buttons: {'Сохранить': this.save, 'Отмена': this.close}
 	        });
 	 
 	        return this;
 	    },
 	    close: function() {
+	    	this.$el.find('.field').val('');
 	        this.$el.dialog('close');
 	    },
 	    save: function() {
-            this.model.set({'date': new Date(), 'title': this.$('#event-dialog-title').val(), 'desc': this.$('#event-dialog-desc').val()});
+	    	var newEventYear = fullCalendarView.$el.children('table').attr("data-year");
+	    	var newEventMonth = fullCalendarView.$el.children('table').attr("data-month");
+	    	var newEventDay = this.selectDate;
+            this.model.set({'date': new Date(newEventYear, newEventMonth, newEventDay), 'title': this.$('#event-dialog-title').val(), 'desc': this.$('#event-dialog-desc').val()});
             this.collection.add(this.model);
             this.close();
         },

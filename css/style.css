@@ -38,7 +38,9 @@ article, aside, details, figcaption, figure, footer, header, menu, nav, section,
 }
 .calendar {
   float: left;
-
+}
+.ivent-list-container {
+  margin-top: 20px;
 }
 #events-calendar td{
 		padding: 20px;
