@@ -20,7 +20,19 @@ article, aside, details, figcaption, figure, footer, header, menu, nav, section,
 	padding: 0 10px;
 	width: 990px;
 }
+.wrap:before {
+  content: '';
+  clear: both;
+  display: table;
+  height: 0;
+}
+.events {
+  margin-left: 420px;
+}
+.calendar {
+  float: left;
 
+}
 #events-calendar td{
 		padding: 20px;
 }

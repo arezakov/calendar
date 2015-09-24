@@ -18,10 +18,32 @@
 
 	<body>
 		<div class="wrap">
-			<h1>Календарь</h1>
-			<div id="events-calendar"></div>
-
+			<div class="calendar">
+				<h2>Календарь</h2>
+				<div id="events-calendar"></div>
+			</div>
+			
+			<div class="events">
+				<h2>События</h2>
+				<div id="events-list"></div>
+			</div>
 		</div>
+
+		<script id="eventTemplate" type="text/template">
+		    <h3><%= title %></h3>
+		    <p><%= desc %></p>
+		    <p><%= date %></p>
+		</script>
+		<script id="contactTemplate" type="text/template">
+		    <img src="<%= photo %>" alt="<%= name %>" />
+		    <h1><%= name %><span><%= type %></span></h1>
+		    <div><%= address %></div>
+		    <dl>
+		        <dt>Tel:</dt><dd><%= tel %></dd>
+		        <dt>Email:</dt><dd><a href="mailto:<%= email %>"><%= email %></a></dd>
+		    </dl>
+		</script>
+
 
 		<script type="text/javascript" src="http://yastatic.net/jquery/2.1.4/jquery.js"></script>
 		

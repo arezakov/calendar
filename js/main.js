@@ -2,15 +2,73 @@
 	
 	"use strict"
 
-	var EventModel = Backbone.Model.extend({
-		default:{
-			date: null,
-			title: '',
-			desc: ''
-		}		
+	var contacts = [
+        { date: null,  title: "family", desc: "121212" },
+        { date: null,  title: "family", desc: "121212" },
+        { date: null,  title: "friend", desc: "121212" }
+    ];
+ 
+
+    var Event = Backbone.Model.extend({
+	    defaults: {
+	        photo: "/img/placeholder.png"
+	    }
 	});
 
-	var events = new Backbone.Collection({model: EventModel});
+	var Events = Backbone.Collection.extend({
+	    model: Event
+	});
+
+	var events = new Events();
+
+	var EventView = Backbone.View.extend({
+	    tagName: "article",
+	    className: "contact-container",
+	    template: $("#eventTemplate").html(),
+
+	    render: function () {
+	        var tmpl = _.template(this.template);
+
+	        this.$el.html(tmpl(this.model.toJSON()));
+	        return this;
+	    }
+	});
+
+	var EventsListView = Backbone.View.extend({
+	    el: $("#events-list"),
+
+	    initialize: function () {
+	        this.collection = events;
+	        this.render();
+	    },
+
+	    render: function () {
+	        var that = this;
+	         this.$el.html('');
+	        _.each(this.collection.models, function (item) {
+	            that.renderEvent(item);
+	        }, this);
+
+	        this.$el.prepend('<input type="button" value="Создать событие">');
+	    },
+
+	    renderEvent: function (item) {
+	        var eventView = new EventView({
+	            model: item
+	        });
+	        this.$el.append(eventView.render().el);
+	    },
+	    events: {
+	    	"click input": "addEvent",
+	    },
+	    addEvent: function() {
+	    	this.collection.add({date: null, title:'новое событие', desc: 'Описание нового события'});
+	    	console.log(this.collection);
+	    }
+	});
+
+	var eventsListView = new EventsListView();
+	eventsListView.listenTo(events, 'add', eventsListView.render);
 
 	var DateModel = Backbone.Model.extend({
 		defaults:{
@@ -61,7 +119,6 @@
             		todayFlag = true;
             	}
             	result.push({day:'', num: dayNum++, today: todayFlag});
-
             };
 
 			return result;
@@ -127,8 +184,11 @@
 			this.render();
 		}
 	});
+
 	var dateModel = new DateModel();
 	var cView = new CalendarView({el: $("#events-calendar"), model: dateModel});
 	cView.listenTo(dateModel, 'change', cView.render);
+
+	
 
 })();
