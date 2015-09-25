@@ -130,30 +130,15 @@
 	});
 
 	var FullCalendarView = Backbone.View.extend({
+
+		template: $("#calendarTemplate").html(),
+
 		render: function(){
-			var val = this.model.GetDateString(),
-				dayArr = this.model.GetDays(),
+			var dayArr = this.model.GetDays(),
 				month = this.model.GetMonth().rusNameMonth,
 				year = this.model.GetYear(),
-				//убрать в шаблон!
-				calendarHTML = '<table data-year="'+ year +'" data-month="' + this.model.GetMonth().numberMonth + '">\
-					<thead>\
-						<tr>\
-							<td class="monthPrev">‹</td>\
-							<td colspan="5">' + month + ' ' + year + '</td>\
-							<td class="monthNext">›</td>\
-						</tr>\
-						<tr>\
-							<td>Пн</td>\
-							<td>Вт</td>\
-							<td>Ср</td>\
-							<td>Чт</td>\
-							<td>Пт</td>\
-							<td>Сб</td>\
-							<td>Вс</td>\
-						</tr>\
-					</thead>\
-					<tbody>';
+				tmpl = _.template(this.template),
+				calendarHTML = '';
 					
 			_.each(dayArr, function(day, num) {
 
@@ -163,12 +148,17 @@
 				if ((num % 7) == 0 && num != 0) 
 						calendarHTML += '</tr><tr>';
 
-				calendarHTML += '<td '+ (day.evcid ? 'data-evcid="'+day.evcid+'"' : '') +' class="' + (day.num && !day.evcid ? 'date ' : '') + (day.today == true ? 'today ' : '') + (day.evcid ? 'has-ivent' : '') +' ">'  + day.num + '</td>';
+				calendarHTML += '<td '+ (day.evcid ? 'data-evcid="'+day.evcid+'"' : '') +' class="' + (day.num && !day.evcid ? 'date ' : '') + (day.today == true ? 'today ' : '') + (day.evcid ? 'has-event' : '') +' ">'  + day.num + '</td>';
 			});
 
-			calendarHTML += '</tr></tbody></table>';
+			calendarHTML += '</tr>';
 
-			this.el.innerHTML = calendarHTML;  
+			this.$el.html(tmpl({
+				year: year,
+				monthMumber: this.model.GetMonth().numberMonth,
+				month: month,
+				calendarHTML: calendarHTML
+			}));
 
 			return this;
 		},

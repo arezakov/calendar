@@ -49,6 +49,31 @@
 		    <p><%= desc %></p>
 		</script>
 
+		<script id="calendarTemplate" type="text/template">
+				<table data-year=<%= year %> data-month=<%= monthMumber %>>
+					<thead>
+						<tr>
+							<td class="monthPrev">‹</td>
+							<td colspan="5"><%= month %> <%= year %></td>
+							<td class="monthNext">›</td>
+						</tr>
+						<tr>
+							<td>Пн</td>
+							<td>Вт</td>
+							<td>Ср</td>
+							<td>Чт</td>
+							<td>Пт</td>
+							<td class="holiday">Сб</td>
+							<td class="holiday">Вс</td>
+						</tr>
+					</thead>
+					<tbody>
+					<%= calendarHTML %>
+					</tbody>
+					</table>
+		</script>
+
+
 		
 		<script type="text/javascript" src="http://yastatic.net/jquery/2.1.4/jquery.js"></script>
 		<script src="js/jquery-ui.min.js"></script>

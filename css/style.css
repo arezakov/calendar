@@ -20,6 +20,7 @@ body {
 }
 h2 {
   text-align: center;
+  margin-bottom: 20px;
 }
 .dialog {
   display: none;
@@ -66,7 +67,9 @@ h2 {
 }
 .ivent-list-container + .ivent-list-container{
   border-top: 1px solid #fff;
-  padding-bottom: 0;
+}
+.ivent-list-container:last-of-type {
+    padding-bottom: 0;
 }
 .ivent-list-container {
   padding: 10px 0;
@@ -75,43 +78,37 @@ h2 {
 		padding: 20px;
 }
 
+#events-calendar table td{
+    border: 1px solid #fff;
+}
 #events-calendar {
   line-height: 1.2em;
   font-size: 15px;
   text-align: center;
 }
-#events-calendar thead tr:last-child {
-  font-size: small;
-  color: rgb(85, 85, 85);
-}
-#events-calendar thead tr:nth-child(1) td:nth-child(2) {
-  color: rgb(50, 50, 50);
-}
+
 #events-calendar thead tr:nth-child(1) td:nth-child(1):hover, #events-calendar thead tr:nth-child(1) td:nth-child(3):hover {
   cursor: pointer;
 }
-#events-calendar tbody td {
-  color: rgb(44, 86, 122);
-}
 
 #events-calendar tbody td.today:hover,
-#events-calendar tbody td.has-ivent:hover,
+#events-calendar tbody td.has-event:hover,
 #events-calendar tbody td.date:hover {
   outline: 1px solid #F6A828;
   cursor: pointer;
 }
 #events-calendar tbody td:nth-child(n+6), #events-calendar .holiday {
-  color: rgb(231, 140, 92);
+  color: rgb(220, 0, 0);
 }
 #events-calendar tbody td.today {
   background: rgb(220, 0, 0);
   color: #fff;
 }
-#events-calendar tbody td.event {
-  background: rgb(0, 220, 0);
-  color: #fff;
+#events-calendar tbody td.has-event.today {
+  box-shadow: inset 0px 0px 0px 12px #00DCA6;
+  background: rgb(220, 0, 0);
 }
-#events-calendar tbody td[data-evcid] {
+#events-calendar tbody td.has-event {
   background: #00DCA6;
   color: #fff;
 }
