@@ -45,9 +45,15 @@
 		render: function () {
 			var that = this;
 			 this.$el.html('');
-			_.each(this.collection.models, function (item) {
-				that.renderEvent(item);
-			}, this);
+			 if (this.collection.models.length) {
+			 	_.each(this.collection.models, function (item) {
+					that.renderEvent(item);
+				}, this);
+				 this.$el.closest('.events').addClass('has-events');
+				} else {
+					this.$el.closest('.events').removeClass('has-events');
+				}
+			;
 		},
 
 		renderEvent: function (item) {
