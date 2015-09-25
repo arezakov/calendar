@@ -5,9 +5,17 @@
     var Event = Backbone.Model.extend({
 	    defaults: {
 	        date: null
-	    }
+	    },
+	    checkMonth: function(month) {
+	    	return month == this.get("date").getMonth();
+	    },
+	    checkYear: function(year) {
+	    	return year == this.get("date").getFullYear();
+	    },
+	    checkDay: function(dayNum) {
+	   		return dayNum == this.get("date").getDate();
+	   	},
 	});
-
 	var Events = Backbone.Collection.extend({
 	    model: Event
 	});
@@ -30,7 +38,7 @@
 	    el: $("#events-list"),
 
 	    initialize: function () {
-	        this.collection = events;
+	        this.collection = events; //переменной
 	        this.render();
 	    },
 
@@ -75,9 +83,9 @@
 			return this.get('date').getFullYear();
 		},
 		GetDays: function(){
-			var year = this.get('date').getFullYear(),
-				month = this.get('date').getMonth(),
-				date = this.get('date').getDate(),
+			var year = this.get('date').getFullYear(), 
+				month = this.get('date').getMonth(),   
+				date = this.get('date').getDate(),     
 				todayFlag = false,
 				todayDate = new Date(),
 				todayYear = todayDate.getFullYear(),
@@ -90,7 +98,7 @@
 				lastDay = new Date(year, month+1, 0).getDate(), //Сколько дней
                 dnFirst = new Date(year, month, 1).getDay(), //день недели первого дня месяца
                 dnLast = new Date(year, month, lastDay).getDay(); //день недели последнего дня месяца
-
+          
             for (var i = 1; i <= 42; i++) {
             	todayFlag = false;
             	evcid = '';
@@ -102,28 +110,28 @@
             		todayFlag = true;
             	}
 
-            	events.each(function(item, nom){
-	            	if (year == item.get("date").getFullYear() && month == item.get("date").getMonth() && dayNum == item.get("date").getDate()) {
-	            			evcid = item.cid;
-	            			//return true;
+            	events.each(function(item){ 
+	            	if (item.checkMonth(month) && item.checkYear(year) && item.checkDay(dayNum)) {
+	            		evcid = item.cid;
 	            	}
+	         //   	console.log(item);
 	            });
 
             	result.push({day:'', num: dayNum++, today: todayFlag, evcid: evcid});
             };
-           
-           	
-         	//console.log(result);
+           // console.log(result);
 			return result;
 		}
 	});
 
 	var FullCalendarView = Backbone.View.extend({
 		render: function(){
+			console.log(this.model);
 			var val = this.model.GetDateString(),
 				dayArr = this.model.GetDays(),
 				month = this.model.GetMonth().rusNameMonth,
 				year = this.model.GetYear(),
+				//в шаблон!
 				calendarHTML = '<table data-year="'+ year +'" data-month="' + this.model.GetMonth().numberMonth + '">\
 					<thead>\
 						<tr>\
@@ -183,28 +191,26 @@
             this.eventView.render();
 	    },
 	    changeEvent: function(fcEvent){
-	    	//console.log(this.eventView);
 	 		this.eventView.model = this.collection.get(fcEvent.target.dataset.evcid);
         	this.eventView.render();
 	    }
 	});
 	
 	var EventView = Backbone.View.extend({
-		 el: $('#event-dialog'),
+		el: $('#event-dialog'),
 	    initialize: function() {
 	        _.bindAll(this, 'save', 'close', 'open', 'remove');
 	    },
 	    render: function() {
 	    	var buttons = {'Сохранить': this.save};
-
-	        if (!this.model.isNew()) {
+	        if (this.model.hasChanged()) {
 	            _.extend(buttons, {'Удалить': this.remove});
 	        }
        		_.extend(buttons, {'Отмена': this.close});
 
 	    	    this.$el.dialog({
 		            modal: true,
-		            title: (this.model.isNew() ? 'Добавить' : 'Редактировать') + ' событие',
+		            title: (!this.model.hasChanged() ? 'Добавить' : 'Редактировать') + ' событие',
 		            buttons: buttons,
 		            open: this.open,
 		        });
@@ -220,7 +226,6 @@
 	        this.$('#event-dialog-desc').val(this.model.get('desc'));
 	    },
 	    save: function() {
-	    	//console.log(this.collection.where({'title': '111'}));
 	    	if (this.model.isNew()) {
 	    		var newEventYear = fullCalendarView.$el.children('table').attr("data-year");
 		    	var newEventMonth = fullCalendarView.$el.children('table').attr("data-month");
