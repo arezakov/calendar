@@ -103,7 +103,7 @@
 				todayFlag = false;
 				evcid = '';
 				if ((i < dnFirst) || (dayNum > lastDay)) {
-					result.push({day:'', num:'-'});
+					result.push({day:'', num:''});
 					continue;
 				}
 				if (year == todayYear && month == todayMonth && dayNum == todayDay) {
@@ -128,7 +128,7 @@
 				dayArr = this.model.GetDays(),
 				month = this.model.GetMonth().rusNameMonth,
 				year = this.model.GetYear(),
-				//в шаблон!
+				//убрать в шаблон!
 				calendarHTML = '<table data-year="'+ year +'" data-month="' + this.model.GetMonth().numberMonth + '">\
 					<thead>\
 						<tr>\
@@ -156,7 +156,7 @@
 				if ((num % 7) == 0 && num != 0) 
 						calendarHTML += '</tr><tr>';
 
-				calendarHTML += '<td '+ (day.evcid ? 'data-evcid="'+day.evcid+'"' : '') +' class="' + (day.num != '-' && !day.evcid ? 'date ' : '') + (day.today == true ? 'today ' : '') + (day.evcid ? 'has-ivent' : '') +' ">'  + day.num + '</td>';
+				calendarHTML += '<td '+ (day.evcid ? 'data-evcid="'+day.evcid+'"' : '') +' class="' + (day.num && !day.evcid ? 'date ' : '') + (day.today == true ? 'today ' : '') + (day.evcid ? 'has-ivent' : '') +' ">'  + day.num + '</td>';
 			});
 
 			calendarHTML += '</tr></tbody></table>';

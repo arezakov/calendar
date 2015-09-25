@@ -25,7 +25,7 @@
 			</div>
 			
 			<div class="events">
-				<h2>События</h2>
+				<h2>Список событий</h2>
 				<div id="events-list"></div>
 			</div>
 		</div>
@@ -45,9 +45,9 @@
         </div>
 
 		<script id="eventTemplate" type="text/template">
+		   	<p><%= date.getDate() + '.' + (date.getMonth()+1) + '.' + date.getFullYear() %></p>
 		    <h3><%= title %></h3>
 		    <p><%= desc %></p>
-		    <p><%= date %></p>
 		</script>
 
 		
