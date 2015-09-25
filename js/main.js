@@ -156,7 +156,7 @@
 				if ((num % 7) == 0 && num != 0) 
 						calendarHTML += '</tr><tr>';
 
-				calendarHTML += '<td '+ (day.evcid ? 'data-evcid="'+day.evcid+'"' : '') +' class="' + (day.num != '-' && !day.evcid ? 'date ' : '') + (day.today == true ? 'today ' : '') + ' ">'  + day.num + '</td>';
+				calendarHTML += '<td '+ (day.evcid ? 'data-evcid="'+day.evcid+'"' : '') +' class="' + (day.num != '-' && !day.evcid ? 'date ' : '') + (day.today == true ? 'today ' : '') + (day.evcid ? 'has-ivent' : '') +' ">'  + day.num + '</td>';
 			});
 
 			calendarHTML += '</tr></tbody></table>';
@@ -169,7 +169,7 @@
 			"click .monthPrev": "monthPrev",
 			"click .monthNext": "monthNext",
 			"click .date": "select",
-			"click [data-evcid]": "changeEvent"
+			"click .has-ivent": "changeEvent"
 		},
 		monthPrev: function() {
 			this.model.set({date: new Date(this.model.get('date').getFullYear(), this.model.get('date').getMonth() - 1, 1)});
@@ -188,7 +188,7 @@
 			this.eventView.render();
 		},
 		changeEvent: function(fcEvent){
-	 		this.eventView.model = this.collection.get(fcEvent.target.dataset.evcid);
+	 		this.eventView.model = this.collection.get($(fcEvent.target).attr("data-evcid"));
 			this.eventView.render();
 		}
 	});
