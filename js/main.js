@@ -2,60 +2,60 @@
 	
 	"use strict"
 
-    var Event = Backbone.Model.extend({
-	    defaults: {
-	        date: null
-	    },
-	    checkMonth: function(month) {
-	    	return month == this.get("date").getMonth();
-	    },
-	    checkYear: function(year) {
-	    	return year == this.get("date").getFullYear();
-	    },
-	    checkDay: function(dayNum) {
+	var Event = Backbone.Model.extend({
+		defaults: {
+			date: null
+		},
+		checkMonth: function(month) {
+			return month == this.get("date").getMonth();
+		},
+		checkYear: function(year) {
+			return year == this.get("date").getFullYear();
+		},
+		checkDay: function(dayNum) {
 	   		return dayNum == this.get("date").getDate();
 	   	},
 	});
 	var Events = Backbone.Collection.extend({
-	    model: Event
+		model: Event
 	});
 
 
 	var EventItemView = Backbone.View.extend({
-	    tagName: "article",
-	    className: "ivent-list-container",
-	    template: $("#eventTemplate").html(),
+		tagName: "article",
+		className: "ivent-list-container",
+		template: $("#eventTemplate").html(),
 
-	    render: function () {
-	        var tmpl = _.template(this.template);
+		render: function () {
+			var tmpl = _.template(this.template);
 
-	        this.$el.html(tmpl(this.model.toJSON()));
-	        return this;
-	    }
+			this.$el.html(tmpl(this.model.toJSON()));
+			return this;
+		}
 	});
 
 	var EventsListView = Backbone.View.extend({
-	    el: $("#events-list"),
+		el: $("#events-list"),
 
-	    initialize: function () {
-	        this.collection = events; //переменной
-	        this.render();
-	    },
+		initialize: function () {
+			this.collection = events; //переменной
+			this.render();
+		},
 
-	    render: function () {
-	        var that = this;
-	         this.$el.html('');
-	        _.each(this.collection.models, function (item) {
-	            that.renderEvent(item);
-	        }, this);
-	    },
+		render: function () {
+			var that = this;
+			 this.$el.html('');
+			_.each(this.collection.models, function (item) {
+				that.renderEvent(item);
+			}, this);
+		},
 
-	    renderEvent: function (item) {
-	        var eventItemView = new EventItemView({
-	            model: item
-	        });
-	        this.$el.append(eventItemView.render().el);
-	    }
+		renderEvent: function (item) {
+			var eventItemView = new EventItemView({
+				model: item
+			});
+			this.$el.append(eventItemView.render().el);
+		}
 	});
 
 	var DateModel = Backbone.Model.extend({
@@ -85,7 +85,7 @@
 		GetDays: function(){
 			var year = this.get('date').getFullYear(), 
 				month = this.get('date').getMonth(),   
-				date = this.get('date').getDate(),     
+				date = this.get('date').getDate(),	 
 				todayFlag = false,
 				todayDate = new Date(),
 				todayYear = todayDate.getFullYear(),
@@ -95,38 +95,35 @@
 
 			var result = [],
 				dayNum = 1,
-				lastDay = new Date(year, month+1, 0).getDate(), //Сколько дней
-                dnFirst = new Date(year, month, 1).getDay(), //день недели первого дня месяца
-                dnLast = new Date(year, month, lastDay).getDay(); //день недели последнего дня месяца
-          
-            for (var i = 1; i <= 42; i++) {
-            	todayFlag = false;
-            	evcid = '';
-            	if ((i < dnFirst) || (dayNum > lastDay)) {
-            		result.push({day:'', num:'-'});
-            		continue;
-            	}
-            	if (year == todayYear && month == todayMonth && dayNum == todayDay) {
-            		todayFlag = true;
-            	}
+				lastDay = new Date(year, month+1, 0).getDate(), //Сколько дней в этом месяце
+				dnFirst = new Date(year, month, 1).getDay(), //день недели первого дня месяца
+				dnLast = new Date(year, month, lastDay).getDay(); //день недели последнего дня месяца
+		  
+			for (var i = 1; i <= 42; i++) {
+				todayFlag = false;
+				evcid = '';
+				if ((i < dnFirst) || (dayNum > lastDay)) {
+					result.push({day:'', num:'-'});
+					continue;
+				}
+				if (year == todayYear && month == todayMonth && dayNum == todayDay) {
+					todayFlag = true;
+				}
 
-            	events.each(function(item){ 
-	            	if (item.checkMonth(month) && item.checkYear(year) && item.checkDay(dayNum)) {
-	            		evcid = item.cid;
-	            	}
-	         //   	console.log(item);
-	            });
+				events.each(function(item){ 
+					if (item.checkMonth(month) && item.checkYear(year) && item.checkDay(dayNum)) {
+						evcid = item.cid;
+					}
+				});
 
-            	result.push({day:'', num: dayNum++, today: todayFlag, evcid: evcid});
-            };
-           // console.log(result);
+				result.push({day:'', num: dayNum++, today: todayFlag, evcid: evcid});
+			};
 			return result;
 		}
 	});
 
 	var FullCalendarView = Backbone.View.extend({
 		render: function(){
-			console.log(this.model);
 			var val = this.model.GetDateString(),
 				dayArr = this.model.GetDays(),
 				month = this.model.GetMonth().rusNameMonth,
@@ -184,60 +181,63 @@
 			this.render();
 		},
 		select: function(selectDate) {
-	        this.eventView = new EventView();
-            this.eventView.collection = this.collection;
-            this.eventView.model = new Event();
-            this.eventView.selectDate = selectDate.target.textContent;
-            this.eventView.render();
-	    },
-	    changeEvent: function(fcEvent){
+			this.eventView = new EventView();
+			this.eventView.collection = this.collection;
+			this.eventView.model = new Event();
+			this.eventView.selectDate = selectDate.target.textContent;
+			this.eventView.render();
+		},
+		changeEvent: function(fcEvent){
 	 		this.eventView.model = this.collection.get(fcEvent.target.dataset.evcid);
-        	this.eventView.render();
-	    }
+			this.eventView.render();
+		}
 	});
 	
 	var EventView = Backbone.View.extend({
 		el: $('#event-dialog'),
-	    initialize: function() {
-	        _.bindAll(this, 'save', 'close', 'open', 'remove');
-	    },
-	    render: function() {
-	    	var buttons = {'Сохранить': this.save};
-	        if (this.model.hasChanged()) {
-	            _.extend(buttons, {'Удалить': this.remove});
-	        }
-       		_.extend(buttons, {'Отмена': this.close});
+		initialize: function() {
+			_.bindAll(this, 'save', 'close', 'open', 'remove');
+		},
+		render: function() {
+			var buttons = {'Сохранить': this.save};
+			if (this.model.hasChanged()) {
+				_.extend(buttons, {'Удалить': this.remove});
+			}
+	   		_.extend(buttons, {'Отмена': this.close});
 
-	    	    this.$el.dialog({
-		            modal: true,
-		            title: (!this.model.hasChanged() ? 'Добавить' : 'Редактировать') + ' событие',
-		            buttons: buttons,
-		            open: this.open,
-		        });
+				this.$el.dialog({
+					modal: true,
+					title: (!this.model.hasChanged() ? 'Добавить' : 'Редактировать') + ' событие',
+					buttons: buttons,
+					open: this.open,
+					minWidth: 400,
+				});
 	 
-	        return this;
-	    },
-	    close: function() {
-	    	this.$el.find('.field').val('');
-	        this.$el.dialog('close');
-	    },
-	    open: function() {
-	        this.$('#event-dialog-title').val(this.model.get('title'));
-	        this.$('#event-dialog-desc').val(this.model.get('desc'));
-	    },
-	    save: function() {
-	    	if (this.model.isNew()) {
-	    		var newEventYear = fullCalendarView.$el.children('table').attr("data-year");
-		    	var newEventMonth = fullCalendarView.$el.children('table').attr("data-month");
-		    	var newEventDay = this.selectDate;
-	    		this.model.set({'date': new Date(newEventYear, newEventMonth, newEventDay), 'title': this.$('#event-dialog-title').val(), 'desc': this.$('#event-dialog-desc').val()});
-           		 this.collection.add(this.model);
-	        } else {
-	            this.model.set({'title': this.$('#event-dialog-title').val(), 'desc': this.$('#event-dialog-desc').val()});
-	        }
-            
-            this.close();
-        },
+			return this;
+		},
+		close: function() {
+			this.$el.find('.field').val('');
+			this.$el.dialog('close');
+		},
+		open: function() {
+			this.$('#event-dialog-title').val(this.model.get('title'));
+			this.$('#event-dialog-desc').val(this.model.get('desc'));
+		},
+		save: function() {
+			if (!this.model.hasChanged()) {
+				var newEventYear = fullCalendarView.$el.children('table').attr("data-year");
+				var newEventMonth = fullCalendarView.$el.children('table').attr("data-month");
+				var newEventDay = this.selectDate;
+				this.model.set({'date': new Date(newEventYear, newEventMonth, newEventDay), 'title': this.$('#event-dialog-title').val(), 'desc': this.$('#event-dialog-desc').val()});
+		   		 this.collection.add(this.model);
+			} else {
+				this.model.set({'title': this.$('#event-dialog-title').val(), 'desc': this.$('#event-dialog-desc').val()});
+			}
+			this.close();
+		},
+		remove: function() {
+			this.model.destroy({success: this.close});
+		}
 
 	});
 
