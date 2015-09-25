@@ -89,6 +89,7 @@
 			return this.get('date').getFullYear();
 		},
 		GetDays: function(){
+			var CALENDAR_CELLS = 42;
 			var year = this.get('date').getFullYear(), 
 				month = this.get('date').getMonth(),   
 				date = this.get('date').getDate(),	 
@@ -105,7 +106,7 @@
 				dnFirst = new Date(year, month, 1).getDay(), //день недели первого дня месяца
 				dnLast = new Date(year, month, lastDay).getDay(); //день недели последнего дня месяца
 		  
-			for (var i = 1; i <= 42; i++) {
+			for (var i = 1; i <= CALENDAR_CELLS; i++) {
 				todayFlag = false;
 				evcid = '';
 				if ((i < dnFirst) || (dayNum > lastDay)) {
