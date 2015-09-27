@@ -166,7 +166,7 @@
 			"click .monthPrev": "monthPrev",
 			"click .monthNext": "monthNext",
 			"click .date": "select",
-			"click .has-ivent": "changeEvent"
+			"click .has-event": "changeEvent"
 		},
 		monthPrev: function() {
 			this.model.set({date: new Date(this.model.get('date').getFullYear(), this.model.get('date').getMonth() - 1, 1)});
