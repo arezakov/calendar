@@ -11,19 +11,78 @@
 		<meta name="keywords" content="KEYWORDS" />
 		
 		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href="css/jquery-ui.min.css" rel="stylesheet">
 		
 		<link rel="stylesheet" href="css/style.css" />
 	</head>
 
 	<body>
 		<div class="wrap">
+<<<<<<< HEAD
 		
 				
 
+=======
+			<div class="calendar">
+				<h2>Календарь</h2>
+				<div id="events-calendar"></div>
+			</div>
+			
+			<div class="events">
+				<h2>Список событий</h2>
+				<div id="events-list"></div>
+			</div>
+>>>>>>> remotes/origin/master
 		</div>
+		
+		<div id='event-dialog' class='dialog ui-helper-hidden'>
+            <form>
+               
+                 <div>
+                    <label>Заголовок:</label>
+                    <input id='event-dialog-title' class="field" type="text"></input>
+                </div>
+                <div>
+                    <label>Описание:</label>
+                    <input id='event-dialog-desc' class="field" type="text"></input>
+                </div>
+            </form>
+        </div>
 
+		<script id="eventTemplate" type="text/template">
+		   	<p><%= date.getDate() + '.' + (date.getMonth()+1) + '.' + date.getFullYear() %></p>
+		    <h3><%= title %></h3>
+		    <p><%= desc %></p>
+		</script>
+
+		<script id="calendarTemplate" type="text/template">
+				<table data-year=<%= year %> data-month=<%= monthMumber %>>
+					<thead>
+						<tr>
+							<td class="monthPrev">‹</td>
+							<td colspan="5"><%= month %> <%= year %></td>
+							<td class="monthNext">›</td>
+						</tr>
+						<tr>
+							<td>Пн</td>
+							<td>Вт</td>
+							<td>Ср</td>
+							<td>Чт</td>
+							<td>Пт</td>
+							<td class="holiday">Сб</td>
+							<td class="holiday">Вс</td>
+						</tr>
+					</thead>
+					<tbody>
+					<%= calendarHTML %>
+					</tbody>
+					</table>
+		</script>
+
+
+		
 		<script type="text/javascript" src="http://yastatic.net/jquery/2.1.4/jquery.js"></script>
+		<script src="js/jquery-ui.min.js"></script>
 		
 		<script type="text/javascript" src="http://yastatic.net/underscore/1.6.0/underscore.js"></script>
 		<script type="text/javascript" src="http://yastatic.net/backbone/1.1.2/backbone.js"></script>

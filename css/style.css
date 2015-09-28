@@ -1,40 +1,114 @@
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea, p, blockquote, th, td, article, aside, canvas, details, figcaption, figure, footer, header, menu, nav, section, summary, time, mark, audio, video {margin: 0; padding: 0;}
+table {border-collapse: collapse; border-spacing: 0;}
+fieldset, img, span {border: 0;}
+address, caption, cite, code, dfn, th, var {font-style: normal; font-weight: normal;}
+ol, ul {list-style: none;}
+caption, th {text-align: left;}
+abbr, acronym {border: 0;}
+sup, sub {vertical-align: baseline; position: relative; top: -.4em;}
+sub {top: .4em;}
+article, aside, details, figcaption, figure, footer, header, menu, nav, section, main, time {display: block;}
+
+* {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+      box-sizing: border-box;
+}
+
+body {
+  padding-top: 40px;
+}
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.dialog {
+  display: none;
+}
+.dialog input{
+  display: block;
+  padding: 8px;
+  width: 100%;
+}
 .wrap {
 	margin: 0 auto;
 	padding: 0 10px;
 	width: 990px;
+  overflow: hidden;
 }
-.calendar-box {
-	td{
-		padding: 20px;
-	}
+.wrap:before {
+  content: '';
+  clear: both;
+  display: table;
+  height: 0;
+}
+.events {
+  margin-left: 420px;
+  background: #f8f8f8;
+  padding: 20px;
+  position: relative;
+  left: -420px;
+  opacity: 0;
+  z-index: 10;
+  transition: all 1s linear 0s;
 }
 
-#calendar2 {
+.events.has-events {
+  opacity: 1;
+  left: 0;
+  transition: all 1s linear 0s;
+}
+
+.calendar {
+  float: left;
+  background: #fff;
+  position: relative;
+  z-index: 20;
+}
+.ivent-list-container + .ivent-list-container{
+  border-top: 1px solid #fff;
+}
+.ivent-list-container:last-of-type {
+    padding-bottom: 0;
+}
+.ivent-list-container {
+  padding: 10px 0;
+}
+#events-calendar td{
+		padding: 20px;
+}
+
+#events-calendar table td{
+    border: 1px solid #fff;
+}
+#events-calendar {
   line-height: 1.2em;
   font-size: 15px;
   text-align: center;
 }
-#calendar2 thead tr:last-child {
-  font-size: small;
-  color: rgb(85, 85, 85);
-}
-#calendar2 thead tr:nth-child(1) td:nth-child(2) {
-  color: rgb(50, 50, 50);
-}
-#calendar2 thead tr:nth-child(1) td:nth-child(1):hover, #calendar2 thead tr:nth-child(1) td:nth-child(3):hover {
+
+#events-calendar thead tr:nth-child(1) td:nth-child(1):hover, #events-calendar thead tr:nth-child(1) td:nth-child(3):hover {
   cursor: pointer;
 }
-#calendar2 tbody td {
-  color: rgb(44, 86, 122);
+
+#events-calendar tbody td.today:hover,
+#events-calendar tbody td.has-event:hover,
+#events-calendar tbody td.date:hover {
+  outline: 1px solid #F6A828;
+  cursor: pointer;
 }
-#calendar2 tbody td:nth-child(n+6), #calendar2 .holiday {
-  color: rgb(231, 140, 92);
+#events-calendar tbody td:nth-child(n+6), #events-calendar .holiday {
+  color: rgb(220, 0, 0);
 }
-#calendar2 tbody td.today {
+#events-calendar tbody td.today {
   background: rgb(220, 0, 0);
   color: #fff;
 }
-#calendar2 tbody td.event {
-  background: rgb(0, 220, 0);
+#events-calendar tbody td.has-event.today {
+  box-shadow: inset 0px 0px 0px 12px #00DCA6;
+  background: rgb(220, 0, 0);
+}
+#events-calendar tbody td.has-event {
+  background: #00DCA6;
   color: #fff;
 }
