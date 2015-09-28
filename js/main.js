@@ -15,7 +15,11 @@
 		checkDay: function(dayNum) {
 	   		return dayNum == this.get("date").getDate();
 	   	},
+	   	checkDate: function (year, month, day) {
+	   		return this.checkMonth(month) && this.checkYear(year) && this.checkDay(day)
+	   	}
 	});
+
 	var Events = Backbone.Collection.extend({
 		model: Event
 	});
@@ -118,7 +122,7 @@
 				}
 
 				events.each(function(item){ 
-					if (item.checkMonth(month) && item.checkYear(year) && item.checkDay(dayNum)) {
+					if (item.checkDate(year, month, dayNum)) {
 						evcid = item.cid;
 					}
 				});
@@ -249,9 +253,5 @@
 
 	var eventsListView = new EventsListView();
 	eventsListView.listenTo(events, 'all', eventsListView.render);
-
-
-
-
 
 })();
