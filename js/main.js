@@ -256,4 +256,3 @@
 	eventsListView.listenTo(events, 'all', eventsListView.render);
 
 })();
->>>>>>> remotes/origin/master
